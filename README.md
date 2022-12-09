@@ -7,6 +7,8 @@ Note that this library does not provide tools for parsing Yarn scripts, or compi
 them down to bytecode - the [official compiler](https://github.com/YarnSpinnerTool/YarnSpinner-Console)
 can be used for this.
 
+⚠️ *This library is still a work in progress, and probably shouldn't be used for anything serious yet.*
+
 ## Installation
 
 ```toml
