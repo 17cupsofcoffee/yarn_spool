@@ -95,12 +95,12 @@ impl Dialogue {
                 }
 
                 OpCode::Jump => {
-                    let target = match self.stack.pop() {
+                    let target = match self.stack.last() {
                         Some(Value::StringValue(s)) => s,
                         other => panic!("unexpected value: {:?}", other),
                     };
 
-                    self.current_index = node.labels[&target] as usize;
+                    self.current_index = node.labels[target] as usize;
                 }
 
                 OpCode::RunLine => {
