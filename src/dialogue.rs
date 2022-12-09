@@ -191,7 +191,15 @@ impl Dialogue {
                 }
 
                 OpCode::JumpIfFalse => {
-                    unimplemented!()
+                    let cond = match self.stack.last() {
+                        Some(Value::BoolValue(x)) => *x,
+                        other => panic!("unexpected value: {:?}", other),
+                    };
+
+                    if !cond {
+                        let target = get_string_operand(instruction, 0);
+                        self.current_index = node.labels[target] as usize;
+                    }
                 }
 
                 OpCode::Pop => {
