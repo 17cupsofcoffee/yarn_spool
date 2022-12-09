@@ -1,7 +1,6 @@
 use std::error::Error;
 use std::io::BufRead;
 
-use prost::Message;
 use yarn_spool::{expand_substitutions, load_string_table, Dialogue, DialogueEvent, Program};
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -19,7 +18,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let program_bytes = std::fs::read("examples/generated/script.yarnc")?;
     let string_table_bytes = std::fs::read("examples/generated/script-Lines.csv")?;
 
-    let program = Program::decode(program_bytes.as_slice())?;
+    let program = Program::from_bytes(&program_bytes);
     let string_table = load_string_table(&string_table_bytes);
 
     // To run programs, you need to load them into a Dialogue.
