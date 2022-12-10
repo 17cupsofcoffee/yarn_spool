@@ -11,15 +11,32 @@ pub enum DialogueEvent {
 
 #[derive(Debug, Default, Clone)]
 pub struct DialogueLine {
+    /// The string ID for this line. Use it to look up the player-facing
+    /// text in a string table.
     pub id: String,
+
+    /// Values that should be substituted into the text before displaying
+    /// it. These generally come from variables in the script.
     pub substitutions: Vec<String>,
 }
 
 #[derive(Debug, Clone)]
 pub struct DialogueOption {
+    /// The identifying number for this option. Pass this to
+    /// [`Dialogue::set_selected_option`].
+    #[doc(alias = "id")]
     pub index: usize,
+
+    /// The line of text that should be displayed for this
+    /// option.
     pub line: DialogueLine,
+
+    /// The node that will be run if this option is selected.
     pub destination: String,
+
+    /// Whether or not this option should be available to the
+    /// player. If this is false, you may want to hide this
+    /// option, or make it unselectable.
     pub available: bool,
 }
 
