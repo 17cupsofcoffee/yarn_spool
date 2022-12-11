@@ -1,7 +1,7 @@
 use std::error::Error;
 use std::io::BufRead;
 
-use yarn_spool::{expand_substitutions, load_string_table, Dialogue, DialogueEvent, Program};
+use yarn_spool::{expand_substitutions, read_string_table_file, Dialogue, DialogueEvent, Program};
 
 fn main() -> Result<(), Box<dyn Error>> {
     // A Yarn script compiles down into bytecode (.yarnc files) and
@@ -15,11 +15,8 @@ fn main() -> Result<(), Box<dyn Error>> {
     // yarn_spool's API. Bytecode is represented as a Program, and
     // a string table is represented as a HashMap<String, String>.
 
-    let program_bytes = std::fs::read("examples/generated/script.yarnc")?;
-    let string_table_bytes = std::fs::read("examples/generated/script-Lines.csv")?;
-
-    let program = Program::from_bytes(&program_bytes);
-    let string_table = load_string_table(&string_table_bytes);
+    let program = Program::from_file("examples/generated/script.yarnc");
+    let string_table = read_string_table_file("examples/generated/script-Lines.csv");
 
     // To run programs, you need to load them into a Dialogue.
 
