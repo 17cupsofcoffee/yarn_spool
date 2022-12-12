@@ -127,7 +127,7 @@ impl Dialogue {
                     let substitutions = self
                         .stack
                         .drain(self.stack.len() - sub_count as usize..)
-                        .map(value_to_string)
+                        .map(String::from)
                         .collect();
 
                     self.current_line = DialogueLine { id, substitutions };
@@ -155,7 +155,7 @@ impl Dialogue {
                     let substitutions = self
                         .stack
                         .drain(self.stack.len() - sub_count as usize..)
-                        .map(value_to_string)
+                        .map(String::from)
                         .collect();
 
                     let line = DialogueLine { id, substitutions };
@@ -352,13 +352,5 @@ fn get_float_operand(instruction: &Instruction, index: usize) -> f32 {
     match get_operand(instruction, index) {
         Value::FloatValue(x) => *x,
         other => panic!("unexpected operand at index {}: {:?}", index, other),
-    }
-}
-
-fn value_to_string(value: Value) -> String {
-    match value {
-        Value::StringValue(x) => x,
-        Value::BoolValue(x) => x.to_string(),
-        Value::FloatValue(x) => x.to_string(),
     }
 }
