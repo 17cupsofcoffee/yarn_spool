@@ -299,8 +299,8 @@ impl Dialogue {
             panic!("out of bounds option");
         }
 
-        let destination = &self.current_options[option].destination;
-        self.stack.push(Value::StringValue(destination.clone())); // TODO: can avoid this
+        let destination = std::mem::take(&mut self.current_options[option].destination);
+        self.stack.push(Value::StringValue(destination));
 
         self.current_options.clear();
 
