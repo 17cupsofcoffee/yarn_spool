@@ -1,4 +1,8 @@
+use std::borrow::Cow;
 use std::collections::HashMap;
+
+use once_cell::sync::Lazy;
+use regex::{Captures, Regex};
 
 use crate::{Instruction, Node, OpCode, Program, Value};
 
@@ -314,13 +318,44 @@ impl Default for Dialogue {
     }
 }
 
-pub fn expand_substitutions(text: &str, substitutions: &[String]) -> String {
-    // TODO: Do this properly.
-    if !substitutions.is_empty() {
-        text.replace("{0}", &substitutions[0])
-    } else {
-        text.to_owned()
-    }
+/// Replaces any substitution markers in a piece of text with values from
+/// the given list.
+///
+/// This is used in order to interpolate variables into lines of text
+/// returned by a [`Dialogue`].
+///
+/// # Example
+///
+/// ```
+/// # use std::borrow::Cow;
+/// # use yarn_spool::expand_substitutions;
+/// #
+/// let text = "{0} and {1}";
+/// let substitutions = &[String::from("foo"), String::from("bar")];
+///
+/// assert_eq!(expand_substitutions(text, substitutions), Cow::from("foo and bar"));
+/// ```
+///
+/// # Panics
+///
+/// This function will panic if `text` contains a marker with an index
+/// that is out of bounds for `substitutions`.
+pub fn expand_substitutions<'a>(text: &'a str, substitutions: &[String]) -> Cow<'a, str> {
+    static REGEX: Lazy<Regex> = Lazy::new(|| Regex::new(r"\{(\d+)\}").unwrap());
+
+    REGEX.replace_all(text, |caps: &Captures<'_>| {
+        let index: usize = caps
+            .get(1)
+            .expect("can't fail as regex matched")
+            .as_str()
+            .parse()
+            .expect("can't fail as regex matched");
+
+        // TODO: The C# version just ignores substitutions that are out of bounds.
+        // Can we do that here? Trying to return the str from the capture causes
+        // lifetime mismatches.
+        &substitutions[index]
+    })
 }
 
 fn get_operand(instruction: &Instruction, index: usize) -> &Value {

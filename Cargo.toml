@@ -10,6 +10,8 @@ bytes = "1.3.0"
 prost = "0.11.3"
 csv = "1.1.6"
 serde = { version = "1.0.148", features = ["derive"] }
+regex = "1.7.0"
+once_cell = "1.16.0"
 
 [build-dependencies]
 prost-build = "0.11.3"
