@@ -1,7 +1,7 @@
 use std::borrow::Cow;
 use std::collections::HashMap;
+use std::sync::OnceLock;
 
-use once_cell::sync::Lazy;
 use regex::{Captures, Regex};
 
 use crate::{Instruction, Node, OpCode, Program, Value};
@@ -341,9 +341,11 @@ impl Default for Dialogue {
 /// This function will panic if `text` contains a marker with an index
 /// that is out of bounds for `substitutions`.
 pub fn expand_substitutions<'a>(text: &'a str, substitutions: &[String]) -> Cow<'a, str> {
-    static REGEX: Lazy<Regex> = Lazy::new(|| Regex::new(r"\{(\d+)\}").unwrap());
+    static REGEX: OnceLock<Regex> = OnceLock::new();
 
-    REGEX.replace_all(text, |caps: &Captures<'_>| {
+    let regex = REGEX.get_or_init(|| Regex::new(r"\{(\d+)\}").unwrap());
+
+    regex.replace_all(text, |caps: &Captures<'_>| {
         let index: usize = caps
             .get(1)
             .expect("can't fail as regex matched")
