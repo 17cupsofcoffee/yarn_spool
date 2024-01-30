@@ -1,13 +1,13 @@
 # yarn_spool
 
+_**⚠️ Deprecated:** There is now a [semi-official Yarn Spinner implementation in Rust](https://github.com/YarnSpinnerTool/YarnSpinner-Rust), which is much more feature-complete than this crate!_
+
 yarn_spool is a runtime for [Yarn Spinner](https://yarnspinner.dev) scripts,
 written in Rust.
 
 Note that this library does not provide tools for parsing Yarn scripts, or compiling
 them down to bytecode - the [official compiler](https://github.com/YarnSpinnerTool/YarnSpinner-Console)
 can be used for this.
-
-⚠️ *This library is still a work in progress, and probably shouldn't be used for anything serious yet.*
 
 ## Installation
 
